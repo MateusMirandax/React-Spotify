@@ -1,19 +1,30 @@
 import express from 'express';
-import conectDb from './db.js';
-import cors from 'cors'
+  import conectDb from './db.js';
+import cors from 'cors';
+import artista from './models/Artista.js';
  
 const app = express();
 app.use(cors());
-const conexao = await conectDb()
+ const conexao = await conectDb()
  
 conexao.on('error', (erro) => {
-    console.log('Erro ao conectar', erro)
-});
+     console.log('Erro ao conectar', erro)
+ });
  
 conexao.once('open', () => {
-    console.log('Conectando no MongoDB')
-})
+   console.log('Conectando no MongoDB')
+ })
  
+app.get("/artistas", async (req, res) => {
+    const listaArtistas = await artista.find({});
+    res.status(200).json(listaArtistas)
+})
+
+
+app.get("/lindo", (req, res) => {
+    res.send("O mais lindo")
+})
+
 app.listen(3000, () => {
     console.log('Servidor Rodando')
 });
